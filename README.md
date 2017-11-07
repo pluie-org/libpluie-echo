@@ -23,6 +23,14 @@ sudo ninja install -C build
 valac --pkg pluie-echo-0.1  main.vala -o echo
 ```
 
+## Docker
+
+a demo image is available on docker hub. you can run a container with :
+
+```
+docker run --rm -it pluie/libecho
+```
+
 ## Usage
 
 #### playing with colors
@@ -38,6 +46,29 @@ int main (string[] args)
 }
 ```
 
+#### playing with ColorConf
+
+compile main.vala
+```
+valac --pkg pluie-echo-0.1  main.vala -o echo
+```
+
+run ./echo
+
+![ColorConf 1 code](https://www.meta-tech.academy/img/libpluie-echo_sample_colorconf1.png)
+
+then, change in resources/echo.ini :  
+```
+title      =  15,1,97
+title_item = 220,1
+title_sep  =  97,1
+```
+
+run echo again :
+
+![ColorConf 2 code](https://www.meta-tech.academy/img/libpluie-echo_sample_colorconf2.png)
+
+
 #### init OutputFormatter
 ```
 using GLib;
@@ -45,8 +76,7 @@ using Pluie;
 
 int main (string[] args)
 {
-    OutputFormatter of;  
-    Echo.init (true /* enable tracing */, "resources/echo.ini", out of);
+    var of = Echo.init (true /* enable tracing */, "resources/echo.ini" /* optional config file */);
     Dbg.in (Log.METHOD);
     
     of.echo (
@@ -56,25 +86,27 @@ int main (string[] args)
         true,
         // indent all line
         true,
-        // set color with Pluie.ECHO enum listing all defined styles
+        // set color with Pluie.ECHO enum (listing all defined styles in echo.ini)
         ECHO.ACTION
     );
     ...
+
+    Dbg.out (Log.METHOD);
     return 0;
 }
 ```
 
 #### more samples
 
-![Sample 1 code](https://www.meta-tech.academy/img/libpluie-echo_sample_code1.png)
-![Sample 1 output](https://www.meta-tech.academy/img/libpluie-echo_sample1.png)
-![Sample 2 code](https://www.meta-tech.academy/img/libpluie-echo_sample_code2.png)
-![Sample 2 output](https://www.meta-tech.academy/img/libpluie-echo_sample2.png)
+![Sample 1 code](https://www.meta-tech.academy/img/libpluie-echo_sample_code1.png?tmp=1)
+![Sample 1 output](https://www.meta-tech.academy/img/libpluie-echo_sample1.png?tmp=1)
+![Sample 2 code](https://www.meta-tech.academy/img/libpluie-echo_sample_code2.png?tmp=1)
+![Sample 2 output](https://www.meta-tech.academy/img/libpluie-echo_sample2.png?tmp=1)
 
 
 ## Configuration
 
-configuration file is installed on {prefix}/share/pluie/echo.ini
+configuration file is installed by default on {prefix}/share/pluie/echo.ini
 
 ```
 [Term]

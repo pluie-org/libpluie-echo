@@ -14,13 +14,20 @@ conf.set('VERSION'     , version)
 conf.set('INSTALL_PATH', bindir)
 conf.set('DATA_PATH'   , datadir)
 
+configure_file(
+  input: 'install.vala.in',
+  output: 'install.vala',
+  configuration: conf
+)
+
 sources       = [
     'src/Pluie.Color.vala',
     'src/Pluie.ColorConf.vala',
     'src/Pluie.Dbg.vala',
     'src/Pluie.global.vala',
     'src/Pluie.OutputFormatter.vala',
-    'src/Pluie.Sys.Cmd.vala'
+    'src/Pluie.Sys.Cmd.vala',
+    'build/install.vala'
 ]
 
 install_data('resources/echo.ini', install_dir : datadir)
@@ -35,7 +42,7 @@ libpluie_echo = library('pluie-echo-' + version, sources,
 pkgconfig = import('pkgconfig')
 pkgconfig.generate(libraries: libpluie_echo,
                    requires: 'glib-2.0 gobject-2.0',
-                   variables: 'datarootdir=${prefix}/share\ndatadir=${datarootdir}/pluie',
+                   variables: 'datarootdir='+join_paths('${prefix}', get_option('datadir'))+'\ndatadir='+join_paths('${datarootdir}', 'pluie'),
                    version: version,
                    name: 'libpluie-echo',
                    filebase: 'pluie-echo-' + version,

@@ -34,12 +34,15 @@ namespace Pluie
     }
     
     namespace Echo
-    {    
-        public void init (bool debug, string path, out OutputFormatter of)
+    {
+        public static OutputFormatter of;
+
+        public OutputFormatter init (bool debug, string? path = null)
         {
-            var conf = new ColorConf (path);
-            of       = new OutputFormatter (conf);
-            Dbg.init (of, debug);
+            var conf = new ColorConf (path ?? Path.build_filename (DATA_PATH, "echo.ini"));
+            Echo.of = new OutputFormatter (conf);
+            Dbg.init (Echo.of, debug);
+            return Echo.of;
         }
     }
 }

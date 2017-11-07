@@ -7,9 +7,7 @@ errordomain MyError {
 
 int main (string[] args)
 {
-    OutputFormatter of;  
-    Echo.init (true, "resources/echo.ini", out of);
-
+    var of = Echo.init (true, "resources/echo.ini");
     Dbg.in (Log.METHOD, null, Log.LINE, Log.FILE);
 
     of.title ("MyApp", "0.2.2", "a-sansara");

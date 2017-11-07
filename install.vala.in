@@ -1,0 +1,9 @@
+namespace Pluie
+{  
+    namespace Echo
+    {  
+        protected const string INSTALL_PATH = "@INSTALL_PATH@";
+        protected const string DATA_PATH    = "@DATA_PATH@";
+        protected const string VERSION      = "@VERSION@";
+    }
+}
