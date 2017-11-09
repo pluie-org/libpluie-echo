@@ -3,6 +3,10 @@ using Pluie;
 
 namespace Pluie
 {
+    /**
+     * enumerate predefined {@link Color} mapped to default config file
+     * see resources/echo.ini
+     **/
     public enum ECHO
     {
         DEFAULT,
@@ -32,12 +36,13 @@ namespace Pluie
         WARN,
         ERROR;
     }
-    
+
+
     namespace Echo
     {
         public static OutputFormatter of;
 
-        public OutputFormatter init (bool debug, string? path = null)
+        public static OutputFormatter init (bool debug, string? path = null)
         {
             var conf = new ColorConf (path ?? Path.build_filename (DATA_PATH, "echo.ini"));
             Echo.of = new OutputFormatter (conf);

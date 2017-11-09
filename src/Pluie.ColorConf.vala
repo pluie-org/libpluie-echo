@@ -1,6 +1,11 @@
 using GLib;
 using Pluie;
 
+/**
+ * a Class representing a set of {@link Color}
+ * mapping {@link ECHO} colors with values coming from
+ * the specifyed ini config file
+ **/
 public class Pluie.ColorConf
 {
 
@@ -11,7 +16,10 @@ public class Pluie.ColorConf
     string[]               keys;
     Array<Color>           colors      = new Array<Color> ();
 
-
+    /**
+     * see resources/echo.ini file
+     * @param path config ini file path overriding Pluie.ECHO color values
+     **/
     public ColorConf(string path)
     {
         Dbg.in (Log.METHOD, "path:'%s'".printf (path), Log.LINE, Log.FILE);
@@ -20,7 +28,11 @@ public class Pluie.ColorConf
         Dbg.out (Log.METHOD, null, Log.LINE, Log.FILE);
     }
 
-
+    /**
+     * get specifiyed ECHO color instance
+     * @param name the choosen color
+     * @return the corresponding Color instance
+     **/
     public new unowned Color? @get (ECHO name)
     {
         unowned Color c = this.colors.index ((int)name);
@@ -64,7 +76,11 @@ public class Pluie.ColorConf
         return v;
     }
 
-
+    /**
+     * get value for Term parameter
+     * @param name from { "term_width", "indent", "key_maxlen" }
+     * @return corresponding value define in config file
+     **/
     public int param (string name)
     {
         string[] plist = { "term_width", "indent", "key_maxlen" };
