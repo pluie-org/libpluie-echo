@@ -20,8 +20,12 @@ sudo ninja install -C build
 ## Compilation
 
 ```
-valac --pkg pluie-echo-0.1  main.vala -o echo
+valac --pkg pluie-echo-0.2  main.vala -o echo
 ```
+
+## Api / Documentation
+
+https://pluie.org/pluie-echo-0.2/index.htm
 
 ## Docker
 
@@ -39,34 +43,36 @@ using Pluie;
 
 int main (string[] args)
 {
-    var c1 = new Color(37, false);
+    var c1 = new Color( 37, false);
     var c2 = new Color(204, true);
-    stdout.printf ("[%s][%s]", c1.s ("oki"), c2.s ("cool"));
+    var c3 = new Color( 15, true, 24);
+    stdout.printf ("[%s][%s]%s\n", c1.s ("oki"), c2.s ("it's"), c3.s ("  cool  "));
     return 0;
 }
 ```
 
 #### playing with ColorConf
 
-compile main.vala
+see samples/pluie-outputFormatter.vala
 ```
-valac --pkg pluie-echo-0.1  main.vala -o echo
+cd samples
+valac --pkg pluie-echo-0.2  pluie-outputFormatter.vala
 ```
 
-run ./echo
+run ./pluie-outputFormatter
 
-![ColorConf 1 code](https://www.meta-tech.academy/img/libpluie-echo_sample_colorconf1.png)
+![ColorConf 1 code](https://www.meta-tech.academy/img/libpluie-echo_sample_colorconf2.png)
 
-then, change in resources/echo.ini :  
+then, change in samples/echo.ini :  
 ```
-title      =  15,1,97
+title      =  15,1,24
 title_item = 220,1
-title_sep  =  97,1
+title_sep  =  24,1
 ```
 
-run echo again :
+run ./pluie-outputFormatter again :
 
-![ColorConf 2 code](https://www.meta-tech.academy/img/libpluie-echo_sample_colorconf2.png)
+![ColorConf 2 code](https://www.meta-tech.academy/img/libpluie-echo_sample_colorconf1.png)
 
 
 #### init OutputFormatter
@@ -76,7 +82,7 @@ using Pluie;
 
 int main (string[] args)
 {
-    var of = Echo.init (true /* enable tracing */, "resources/echo.ini" /* optional config file */);
+    Echo.init (true /* enable tracing */, "resources/echo.ini" /* optional config file */);
     Dbg.in (Log.METHOD);
     
     of.echo (
@@ -98,9 +104,10 @@ int main (string[] args)
 
 #### more samples
 
-![Sample 1 code](https://www.meta-tech.academy/img/libpluie-echo_sample_code1.png?tmp=1)
+see samples/
+![Sample 1 code](https://www.meta-tech.academy/img/libpluie-echo_sample_code1.png?tmp=2)
 ![Sample 1 output](https://www.meta-tech.academy/img/libpluie-echo_sample1.png?tmp=1)
-![Sample 2 code](https://www.meta-tech.academy/img/libpluie-echo_sample_code2.png?tmp=1)
+![Sample 2 code](https://www.meta-tech.academy/img/libpluie-echo_sample_code2.png?tmp=2)
 ![Sample 2 output](https://www.meta-tech.academy/img/libpluie-echo_sample2.png?tmp=1)
 
 
@@ -115,10 +122,13 @@ indent     = 4
 key_maxlen = 17
 
 [Colors]
-# keys are fixed. overwrite only values
+# key are fixed. overwrite only values
 # fg ansi extended color code (0..255), bold (0|1), bg ansi extended color code (0..255)
 default    =
 comment    = 103,1
+command    =  74,1
+param      = 117,1
+bin        =  15,1
 option     =  37,1
 option_sep = 158
 arg        =  97,1

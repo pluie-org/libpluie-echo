@@ -6,6 +6,7 @@ using Pluie;
  * specifiyed {@link ColorConf}
  *
  * {{{
+ * // see samples/pluie-outputFormatter.vala
  * using GLib;
  * using Pluie;
  *
@@ -15,7 +16,7 @@ using Pluie;
  *
  * int main (string[] args)
  * {
- *     var of = Echo.init (true, "resources/echo.ini");
+ *     Echo.init (true, "echo.ini");
  *     Dbg.in (Log.METHOD, null, Log.LINE, Log.FILE);
  *
  *     of.title ("MyApp", "0.2.2", "a-sansara");
@@ -71,7 +72,7 @@ using Pluie;
  * }
  *
  * }}}
- * valac --pkg pluie-echo-0.1 outputFormatter.vala
+ * valac --pkg pluie-echo-0.2 pluie-outputFormatter.vala
  **/
 public class Pluie.OutputFormatter
 {
@@ -88,9 +89,9 @@ public class Pluie.OutputFormatter
      **/
     public int term_width;
     /**
-     * max padding to use for keys in {@see OutputFormatter.keyval} method
+     * max padding to use for keys in {@link keyval} method
      **/
-    int        key_maxlen;
+    public int key_maxlen;
     protected  ColorConf  conf;
 
     /**
@@ -209,7 +210,7 @@ public class Pluie.OutputFormatter
         stderr.printf (
             "\n%s%s\n",
             this.s_indent (-2),
-            this.test(!warn, true).s (" %s : %s ".printf (warn ? "warn" : "error", label))
+            this.test(!warn, true).s ("  %s : %s  ".printf (warn ? "warn" : "error", label))
         );
     }
 
@@ -355,6 +356,25 @@ public class Pluie.OutputFormatter
         else {
             stdout.printf ("%s%s%s\n", this.s_indent(), opt, arg);
         }
+    }
+
+    /**
+     * display usage command
+     * @param bin the binary name
+     * @param command the command name
+     * @param param the optional paramter
+     * @param comment the optional comment
+     **/
+    public void usage_command (string bin, string command, string param = "", string? comment = null)
+    {
+        if (comment != null) {
+            this.echo (comment, true, true, ECHO.COMMENT, 4);
+        }
+        this.echo ("%s  %s  %s".printf (
+            bin,
+            this.c (ECHO.COMMAND).s (command),
+            this.c (ECHO.PARAM  ).s (param)
+        ), true, false, ECHO.BIN, 4);
     }
 
     /**

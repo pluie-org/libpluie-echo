@@ -1,9 +1,11 @@
 using GLib;
+using Pluie;
 
+/**
+ * Dbg namespace with convenient static methods used to display traces
+ **/
 namespace Pluie.Dbg
 {
-
-    static OutputFormatter o;
     /**
      * enable/disable log messages
      **/
@@ -22,17 +24,15 @@ namespace Pluie.Dbg
 
     /**
      * initialize logging
-     * @param of the outputFormatter to use for logging
      * @param debug enable disable log messages
      **/
-    public static void init (OutputFormatter of, bool debug = false)
+    public static void init (bool debug = false)
     {
-        o = of;
         Pluie.Dbg.DBG_ENABLED = debug;
     }
 
 
-    private string parse_params (string? params)
+    private static string parse_params (string? params)
     {
         string str = "";
         if (DBG_ENABLED) {
@@ -40,7 +40,7 @@ namespace Pluie.Dbg
                 string[] list = params.split(":");
                 string   sep  = "";
                 for (var i = 0; i < list.length; i++) {
-                    str += sep + o.c (i % 2 == 0 ? ECHO.KEY : ECHO.VAL).s (list[i] == "(null)" ? "null" : (list[i]));
+                    str += sep + of.c (i % 2 == 0 ? ECHO.KEY : ECHO.VAL).s (list[i] == "(null)" ? "null" : (list[i]));
                     sep = i % 2 == 1 ? ", " : ":";
                 }
             }
@@ -51,25 +51,25 @@ namespace Pluie.Dbg
     /**
      * log method entering
      * @param method the method name
-     * @param params optional parameters string to display on entering
+     * @param parameters optional parameters string to display on entering method
      * @param line optional current file line
      * @param file optional current file
      **/
-    public static void @in(string method, string? params = null, int line = 0, string? file = null)
+    public static void @in(string method, string? parameters = null, int line = 0, string? file = null)
     {
-        Dbg.log ("%s (%s)".printf (method, Dbg.parse_params(params)), line, DBG_ENTER, file);
+        Dbg.log ("%s (%s)".printf (method, Dbg.parse_params(parameters)), line, DBG_ENTER, file);
     }
 
     /**
      * log method leaving
      * @param method the method name
-     * @param params optional parameters string to display on entering
+     * @param parameters optional parameters string to display on leaving method
      * @param line optional current file line
      * @param file optional current file
      **/
-    public static void @out(string method, string? params = null, int line = 0, string? file = null)
+    public static void @out(string method, string? parameters = null, int line = 0, string? file = null)
     {
-        Dbg.log ("%s (%s)".printf (method, Dbg.parse_params(params)), line, DBG_LEAVE, file);
+        Dbg.log ("%s (%s)".printf (method, Dbg.parse_params(parameters)), line, DBG_LEAVE, file);
     }
 
     /**
@@ -101,10 +101,10 @@ namespace Pluie.Dbg
     {
         string label;
         switch (mode) {
-            case DBG_ENTER  : label = o.c (ECHO.ENTER).s ("> "); break;
-            case DBG_LEAVE  : label = o.c (ECHO.LEAVE).s ("< "); break;            
-            case DBG_ERROR  : label = o.c (ECHO.ERROR).s (" Error: ", false); break;
-            case DBG_WARN   : label = o.c (ECHO.WARN ).s (" Warn: ", false); break;
+            case DBG_ENTER  : label = of.c (ECHO.ENTER).s ("> "); break;
+            case DBG_LEAVE  : label = of.c (ECHO.LEAVE).s ("< "); break;
+            case DBG_ERROR  : label = of.c (ECHO.ERROR).s (" Error: ", false); break;
+            case DBG_WARN   : label = of.c (ECHO.WARN ).s (" Warn: ", false); break;
             default         : label = "  "; break;
         }
         return label;
@@ -117,15 +117,15 @@ namespace Pluie.Dbg
             var time = new DateTime.now_local ();
             stderr.printf (
                 "%s%s%s%s%s%s%s%s%s %s\n",
-                o.c (ECHO.ARG ).s ("["),
-                o.c (ECHO.DATE).s (time.format ("%H:%M")),
-                o.c (ECHO.TIME).s (time.format (":%S")),
-                o.c (ECHO.MICROTIME).s (".%d".printf (time.get_microsecond ())),
-                file != null ? o.c (ECHO.COMMENT).s (" "+file) : "",
-                line > 0 && (mode != DBG_INLINE || file != null) ? o.c (ECHO.NUM).s (":%d".printf (line)) : "",
-                o.c (ECHO.ARG).s ("] "),
+                of.c (ECHO.ARG ).s ("["),
+                of.c (ECHO.DATE).s (time.format ("%H:%M")),
+                of.c (ECHO.TIME).s (time.format (":%S")),
+                of.c (ECHO.MICROTIME).s (".%d".printf (time.get_microsecond ())),
+                file != null ? of.c (ECHO.COMMENT).s (" "+file) : "",
+                line > 0 && (mode != DBG_INLINE || file != null) ? of.c (ECHO.NUM).s (":%d".printf (line)) : "",
+                of.c (ECHO.ARG).s ("] "),
                 dbg_label_mode(mode),
-                line > 0 && mode  == DBG_INLINE && file == null  ? o.c (ECHO.NUM).s ("%d: ".printf (line))+msg : msg,
+                line > 0 && mode  == DBG_INLINE && file == null  ? of.c (ECHO.NUM).s ("%d: ".printf (line))+msg : msg,
                 Color.off ()
             );
         }

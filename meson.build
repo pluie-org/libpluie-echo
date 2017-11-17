@@ -3,7 +3,7 @@ project('libpluie-echo', 'vala', 'c')
 glib_dep      = dependency('glib-2.0')
 gobject_dep   = dependency('gobject-2.0')
 
-version       = '0.1'
+version       = '0.2'
 bindir        = join_paths(get_option('prefix'), get_option('bindir'))
 datadir       = join_paths(get_option('prefix'), get_option('datadir'), 'pluie')
 libdir        = join_paths(get_option('prefix'), get_option('libdir'), 'pkgconfig')
